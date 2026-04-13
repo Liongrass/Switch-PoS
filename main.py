@@ -1,19 +1,14 @@
 import asyncio
 
 from payments import listener
-from TP2in9_test import init, pthread_irq
-
-async def count():
-    print("One")
-    await asyncio.sleep(1)
-    print("Two")
-    await asyncio.sleep(1)
+from screens import make_idlescreen
+from display import init, touchme
 
 async def main():
     init()
-    await asyncio.gather(listener(), count(), pthread_irq())
-
-if __name__ == "__main__":
-    import time
+    await make_idlescreen()
+    #await make_salesscreen()
+    await asyncio.gather(listener(), touchme())
+    #await asyncio.gather(touchme())
 
 asyncio.run(main())

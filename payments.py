@@ -4,23 +4,21 @@ import logging
 import websockets
 
 # Functions and variables
-#from display import shutdown
-#from lnbits import get_payments
-#from screens import make_confirmation_screen, make_idlescreen, make_success_overlay
+from display import shutdown
+from lnbits import get_payments
+from screens import make_sucessscreen #make_confirmation_screen, make_idlescreen, make_success_overlay
 #from trigger import pulse
-from var import error, ws_switch
+from touch import mapping
+from var import ws_switch
 
 ####### VARIABLES ########
 
 async def listener():
+    global current_screen
     while True:
-        global error
         try:
             async with websockets.connect(ws_switch) as websocket:
                 logging.info(f"Connected to {ws_switch}. Listening for incoming payments.")
-                error = False
-                print(f"Setting ERROR to False")
-                #make_idlescreen(error)
                 response_str = await websocket.recv()
                 print(response_str)
                 response = response_str.split("-")
@@ -36,19 +34,21 @@ async def listener():
                 else:
                     comment = response[2]
                 logging.debug(f"Incoming message: {response}")
-                amount = get_payments()
-                #make_success_overlay()
+                payments = get_payments()
+                logging.info(f"Received payment over {payments[0]['amount']/1000} satoshi")
+                current_screen = 2
+                logging.debug(f"Current screen: {mapping[current_screen]}")
+                await make_sucessscreen(payments, comment)
                 #pulse(pin, duration)
-                logging.debug(f"Waiting {suceess_screen_expiry}s")
-                await asyncio.sleep(suceess_screen_expiry)
+                #logging.debug(f"Waiting {suceess_screen_expiry}s")
+                #await asyncio.sleep(suceess_screen_expiry)
                 #make_confirmation_screen(amount, comment)
-                logging.debug(f"Waiting {suceess_screen_expiry}s")
-                await asyncio.sleep(suceess_screen_expiry)
+                #logging.debug(f"Waiting {suceess_screen_expiry}s")
+                #await asyncio.sleep(suceess_screen_expiry)
         except websockets.exceptions.WebSocketException as e: 
             logging.error(f"ERROR: {e}")
-            if error == False:
-                error = e
-                #make_idlescreen(error)
+            error = e
+            #make_idlescreen(error)
             sleep(suceess_screen_expiry)
-        #except asyncio.CancelledError:
-            #shutdown()
+        except asyncio.CancelledError:
+            shutdown()

@@ -6,7 +6,7 @@ import os
 import sys
 import time
 import traceback
-#from PIL import ImageFont
+from PIL import ImageFont
 
 ##### VARIABLES #####
 
@@ -36,8 +36,6 @@ coke_animation = ['coke1', 'coke2', 'coke3', 'coke4']
 
 ##### SYSTEM #####
 
-error = False
-
 debuglevel = os.getenv("DEBUG_LEVEL", "INFO")
 
 file_handler = logging.FileHandler('nervenectar.log')
@@ -56,11 +54,30 @@ pulse_pin = float(os.getenv("PULSE_PIN", 5))
 pulse_duration = float(os.getenv("PULSE_DURATION", 500)) / 1000
 relay_duration = float(os.getenv("RELAY_DURATION", 500)) / 1000
 
-'''
+
 ##### DISPLAY #####
+
+current_screen = 0
 
 show_display = os.getenv("SHOWDISPLAY", "True").lower() in ('true', '1', 't')
 
+picdir = os.path.join(os.path.dirname(os.path.realpath(__file__)), 'pic')
+fontdir = os.path.join(os.path.dirname(os.path.realpath(__file__)), 'pic')
+libdir = os.path.join(os.path.dirname(os.path.realpath(__file__)), 'lib')
+
+if os.path.exists(libdir):
+    sys.path.append(libdir)
+
+font_a = os.getenv("FONTA", "Font.ttc")
+font_b = os.getenv("FONTB", "Rushfordclean.otf")
+fontsize_a = int(os.getenv("FONTSIZEA", 14))
+fontsize_b = int(os.getenv("FONTSIZEB", 32))
+fontsize_bs = int(os.getenv("FONTSIZEBS", 18))
+fontA = ImageFont.truetype(os.path.join(picdir, font_a), fontsize_a)
+fontB = ImageFont.truetype(os.path.join(picdir, font_b), fontsize_b)
+fontBs = ImageFont.truetype(os.path.join(picdir, font_b), fontsize_bs)
+
+'''
 display_expiry = int(os.getenv("DISPLAY_DELAY", 1))
 suceess_screen_expiry = int(os.getenv("SUCCESS_SCREEN_EXPIRY", 5))
 
@@ -77,7 +94,6 @@ fontsize_bl = int(os.getenv("FONTSIZEB", 90))
 
 
 #font36 = ImageFont.truetype(os.path.join(picdir, 'Font.ttc'), 36)
-fontA = ImageFont.truetype(os.path.join(picdir, font_a), fontsize_a)
-fontB = ImageFont.truetype(os.path.join(picdir, font_b), fontsize_b)
+
 fontBL = ImageFont.truetype(os.path.join(picdir, font_b), fontsize_bl)
 '''
