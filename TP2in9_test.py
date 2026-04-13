@@ -17,7 +17,8 @@ from TP_lib import icnt86
 from TP_lib import epd2in9_V2
 from TP_lib import weather_2in9_V2
 
-import time 
+import asyncio
+import time
 import logging
 from PIL import Image, ImageDraw, ImageFont
 import traceback
@@ -52,5 +53,5 @@ async def pthread_irq():
             tp.ICNT_Scan(ICNT_Dev, ICNT_Old)
         else :
             ICNT_Dev.Touch = 0
-        time.sleep(0.01)
+        await asyncio.sleep(0.01)
     print("thread irq: exit")

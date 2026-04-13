@@ -2,7 +2,6 @@
 import asyncio
 import logging
 import websockets
-from time import sleep
 
 # Functions and variables
 #from display import shutdown
@@ -41,10 +40,10 @@ async def listener():
                 #make_success_overlay()
                 #pulse(pin, duration)
                 logging.debug(f"Waiting {suceess_screen_expiry}s")
-                sleep(suceess_screen_expiry)
+                await asyncio.sleep(suceess_screen_expiry)
                 #make_confirmation_screen(amount, comment)
                 logging.debug(f"Waiting {suceess_screen_expiry}s")
-                sleep(suceess_screen_expiry)
+                await asyncio.sleep(suceess_screen_expiry)
         except websockets.exceptions.WebSocketException as e: 
             logging.error(f"ERROR: {e}")
             if error == False:
