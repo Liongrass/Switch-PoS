@@ -55,9 +55,15 @@ async def make_idlescreen():
 	draw = ImageDraw.Draw(img)
 	draw.text((canvas_width/2, 5), "Pay with\nLightning", font = fontB, anchor="ma")
 	for i in suggested_wallets:
+		if suggested_wallets.index(i) % 2 == 0:
+			o = 0
+		else:
+			o = 1
+		print(suggested_wallets)
 		load_pics(i, 40)
-		img.paste(pic_img_s, (44, 85 + suggested_wallets.index(i) * 60))
-		draw.text((64, 75 + suggested_wallets.index(i) * 60), i, font = fontA, anchor="mm")
+		#img.paste(pic_img_s, (44, 85 + suggested_wallets.index(i) * 60))
+		img.paste(pic_img_s, (16 + o * 56, 85 + int(round(((suggested_wallets.index(i)- 0.5)/2), 0)) * 60))
+		#draw.text((64, 75 + suggested_wallets.index(i) * 60), i, font = fontA, anchor="mm")
 	draw.text((64, 260), "Press anywhere", font = fontBs, anchor="mm")
 	draw.text((64, 280), "to continue", font = fontBs, anchor="mm")
 	await display_screen(img)
@@ -106,9 +112,6 @@ async def make_sucessscreen(payments, comment):
 	draw = ImageDraw.Draw(img)
 	draw.text((canvas_width/2, 5), "Payment", font = fontB, anchor="ma")
 	draw.text((canvas_width/2, 40), "Received", font = fontB, anchor="ma")
-	print("WATCH THIS")
-	print(payments[0]['extra']['wallet_fiat_amount'])
-	print(payments[0]['extra']['wallet_fiat_currency'])
 	draw.text((canvas_width/2, 80), str(round(payments[0]['extra']['wallet_fiat_amount'],2)), font = fontB, anchor="ma")
 	draw.text((canvas_width/2, 110), payments[0]['extra']['wallet_fiat_currency'], font = fontBs, anchor="ma")
 	draw.text((canvas_width/2, 130), str(payments[0]['amount']/1000) + " sat", font = fontA, anchor="ma")

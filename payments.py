@@ -20,7 +20,7 @@ async def listener():
             async with websockets.connect(ws_switch) as websocket:
                 logging.info(f"Connected to {ws_switch}. Listening for incoming payments.")
                 response_str = await websocket.recv()
-                print(response_str)
+                logging.debug(f"Message received: {response_str}")
                 response = response_str.split("-")
                 pin = response[0]
                 duration = int(response[1])
@@ -35,7 +35,7 @@ async def listener():
                     comment = response[2]
                 logging.debug(f"Incoming message: {response}")
                 payments = get_payments()
-                logging.info(f"Received payment over {payments[0]['amount']/1000} satoshi")
+                logging.info(f"Received payment over {payments[0]['extra']['wallet_fiat_amount']} {payments[0]['extra']['wallet_fiat_currency']} ({payments[0]['amount']/1000} satoshi)")
                 current_screen = 2
                 logging.debug(f"Current screen: {mapping[current_screen]}")
                 await make_sucessscreen(payments, comment)
@@ -51,4 +51,4 @@ async def listener():
             #make_idlescreen(error)
             sleep(suceess_screen_expiry)
         except asyncio.CancelledError:
-            shutdown()
+            await shutdown()
