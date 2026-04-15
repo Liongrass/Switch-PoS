@@ -12,8 +12,6 @@ from PIL import ImageFont
 
 load_dotenv()
 
-start_time = time.time()
-
 ##### SETUP #####
 
 ws_switch = os.getenv("BITCOIN_SWITCH_WS")
@@ -32,13 +30,11 @@ currency = os.getenv("CURRENCY")
 
 suggested_wallets = json.loads(os.environ['SUGGESTED_WALLETS'])
 
-coke_animation = ['coke1', 'coke2', 'coke3', 'coke4']
-
 ##### SYSTEM #####
 
 debuglevel = os.getenv("DEBUG_LEVEL", "INFO")
 
-file_handler = logging.FileHandler('nervenectar.log')
+file_handler = logging.FileHandler('switchpos.log')
 stdout_handler = logging.StreamHandler(sys.stdout)
 handlers = [file_handler, stdout_handler]
 

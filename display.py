@@ -44,7 +44,7 @@ async def touchme():
             ICNT_Dev.Touch = 0
         await asyncio.sleep(0.01)
     logging.debug("thread irq: exit")
-    
+
 
 async def display_screen(screen_img):
     epd.display_Base(epd.getbuffer(screen_img))
@@ -54,7 +54,7 @@ async def shutdown():
     logging.info("ctrl + c:")
     flag_t = 0
     epd.sleep()
-    time.sleep(2)
+    await asyncio.sleep(2)
     #t1.join()
     epd.Dev_exit()
     exit()

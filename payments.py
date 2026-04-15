@@ -34,11 +34,11 @@ async def listener():
                 else:
                     comment = response[2]
                 logging.debug(f"Incoming message: {response}")
-                payments = get_payments()
-                logging.info(f"Received payment over {payments[0]['extra']['wallet_fiat_amount']} {payments[0]['extra']['wallet_fiat_currency']} ({payments[0]['amount']/1000} satoshi)")
+                incoming_payments = get_payments()
+                logging.info(f"Received payment over {incoming_payments[0]['extra']['wallet_fiat_amount']} {incoming_payments[0]['extra']['wallet_fiat_currency']} ({incoming_payments[0]['amount']/1000} satoshi)")
                 current_screen = 2
                 logging.debug(f"Current screen: {mapping[current_screen]}")
-                await make_sucessscreen(payments, comment)
+                await make_sucessscreen(incoming_payments, comment)
                 #pulse(pin, duration)
                 #logging.debug(f"Waiting {suceess_screen_expiry}s")
                 #await asyncio.sleep(suceess_screen_expiry)

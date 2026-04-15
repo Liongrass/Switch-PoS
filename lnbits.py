@@ -17,7 +17,7 @@ def get_headers():
 def get_payments():
 	payments_request = requests.get(url_base_payments, headers=get_headers())
 	payments = payments_request.json()
-	#print(payments)
+	incoming_payments = [i for i in payments if i['amount'] > 0]
 	#amount = payments[0]['amount']/1000
 	#logging.info(f"Payment received: {amount} satoshi")
-	return payments
+	return incoming_payments
