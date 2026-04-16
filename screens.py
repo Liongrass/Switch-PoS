@@ -4,7 +4,7 @@ import logging
 import os
 from PIL import Image, ImageDraw, ImageFont
 import qrcode
-from time import sleep
+#from time import sleep
 import time
 from TP_lib import epd2in9_V2
 
@@ -119,9 +119,17 @@ async def make_sucessscreen(incoming_payments, comment):
 	draw = ImageDraw.Draw(img)
 	draw.text((canvas_width/2, 5), "Payment", font = fontB, anchor="ma")
 	draw.text((canvas_width/2, 40), "Received", font = fontB, anchor="ma")
-	draw.text((canvas_width/2, 80), str(round(incoming_payments[0]['extra']['wallet_fiat_amount'],2)), font = fontB, anchor="ma")
-	draw.text((canvas_width/2, 110), incoming_payments[0]['extra']['wallet_fiat_currency'], font = fontBs, anchor="ma")
-	draw.text((canvas_width/2, 130), str(incoming_payments[0]['amount']/1000) + " sat", font = fontA, anchor="ma")
+	
+	draw.text((canvas_width/2, 85), str(datetime.strptime(incoming_payments[0]['time'], "%Y-%m-%dT%H:%M:%S.%f%z").astimezone().strftime("%H:%M")), font = fontA, anchor="mm")
+	draw.text((canvas_width/2, 95), str(round(incoming_payments[0]['extra']['wallet_fiat_amount'],2)), font = fontB, anchor="ma")
+	draw.text((canvas_width/2, 125), incoming_payments[0]['extra']['wallet_fiat_currency'], font = fontBs, anchor="ma")
+	draw.text((canvas_width/2, 145), str(incoming_payments[0]['amount']/1000) + " sat", font = fontA, anchor="ma")
+	#draw.text((canvas_width/2, 80), str(round(incoming_payments[0]['extra']['wallet_fiat_amount'],2)), font = fontB, anchor="ma")
+	#draw.text((canvas_width/2, 110), incoming_payments[0]['extra']['wallet_fiat_currency'], font = fontBs, anchor="ma")
+	#draw.text((canvas_width/2, 130), str(incoming_payments[0]['amount']/1000) + " sat", font = fontA, anchor="ma")
+
+	draw.text((canvas_width/2, 165), comment, font = fontA, anchor="ma")
+
 	draw.text((64, 250), "Press for", font = fontBs, fill="white", anchor="mm")
 	draw.text((64, 275), "transactions", font = fontBs, fill="white", anchor="mm")
 	await display_screen(img)
@@ -147,7 +155,7 @@ async def make_paymentsscreen():
 		#print("TIME")
 		#print(i['time'])
 		#print(datetime.strptime(i['time'], "%Y-%m-%dT%H:%M:%S.%f%z").astimezone().strftime("%H:%M"))
-		draw.text((canvas_width/2, 65 + incoming_payments.index(i)*50), str(datetime.strptime(i['time'], "%Y-%m-%dT%H:%M:%S.%f%z").astimezone().strftime("%H:%M")), font = fontA, anchor="mm")	
+		draw.text((canvas_width/2, 65 + incoming_payments.index(i)*50), str(datetime.strptime(i['time'], "%Y-%m-%dT%H:%M:%S.%f%z").astimezone().strftime("%H:%M")), font = fontA, anchor="mm")
 		draw.text((canvas_width/2 -2, 85 + incoming_payments.index(i)*50), str(round(i['extra']['wallet_fiat_amount'],2)), font = fontBs, anchor="rm")
 		draw.text((canvas_width/2 +2, 85 + incoming_payments.index(i)*50), i['extra']['wallet_fiat_currency'], font = fontBs, anchor="lm")
 		draw.text((canvas_width/2, 97 + incoming_payments.index(i)*50), str(i['amount']/1000) + " sat", font = fontA, anchor="mm")

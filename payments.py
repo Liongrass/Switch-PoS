@@ -8,16 +8,15 @@ from display import shutdown
 from lnbits import get_payments
 from screens import make_sucessscreen #make_confirmation_screen, make_idlescreen, make_success_overlay
 #from trigger import pulse
-from touch import mapping
+from touch import mapping, set_screen
 from var import ws_switch
 
 ####### VARIABLES ########
 
 async def listener():
-    global current_screen
     while True:
         try:
-            async with websockets.connect(ws_switch) as websocket:
+            async with websockets.connect(ws_switch) as websocket:            
                 logging.info(f"Connected to {ws_switch}. Listening for incoming payments.")
                 response_str = await websocket.recv()
                 logging.debug(f"Message received: {response_str}")
@@ -36,8 +35,10 @@ async def listener():
                 logging.debug(f"Incoming message: {response}")
                 incoming_payments = get_payments()
                 logging.info(f"Received payment over {incoming_payments[0]['extra']['wallet_fiat_amount']} {incoming_payments[0]['extra']['wallet_fiat_currency']} ({incoming_payments[0]['amount']/1000} satoshi)")
-                current_screen = 2
-                logging.debug(f"Current screen: {mapping[current_screen]}")
+                global current_screen
+                await set_screen(2)
+                #print(current_screen)
+                #logging.debug(f"Current screen: {mapping[current_screen]}")
                 await make_sucessscreen(incoming_payments, comment)
                 #pulse(pin, duration)
                 #logging.debug(f"Waiting {suceess_screen_expiry}s")
@@ -49,6 +50,5 @@ async def listener():
             logging.error(f"ERROR: {e}")
             error = e
             #make_idlescreen(error)
-            sleep(suceess_screen_expiry)
         except asyncio.CancelledError:
             await shutdown()

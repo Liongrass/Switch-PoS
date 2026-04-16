@@ -1,4 +1,5 @@
 # Modules
+from datetime import datetime, timedelta
 import logging
 import requests
 
@@ -17,7 +18,17 @@ def get_headers():
 def get_payments():
 	payments_request = requests.get(url_base_payments, headers=get_headers())
 	payments = payments_request.json()
-	incoming_payments = [i for i in payments if i['amount'] > 0]
-	#amount = payments[0]['amount']/1000
-	#logging.info(f"Payment received: {amount} satoshi")
+	#print(payments)
+	#print(payments[0]['time'])
+	incoming_payments = [i for i in payments if i['amount'] > 0 and datetime.now().astimezone() - datetime.strptime(i['time'], "%Y-%m-%dT%H:%M:%S.%f%z").astimezone() < timedelta(hours=24)]
+	for i in incoming_payments:
+		print(i['time'])
+	#print(datetime.strptime(incoming_payments[0]['time'], "%Y-%m-%dT%H:%M:%S.%f%z").astimezone())
+	#print(datetime.now().astimezone())
+	#print(datetime.now().astimezone() - datetime.strptime(incoming_payments[0]['time'], "%Y-%m-%dT%H:%M:%S.%f%z").astimezone())
+	#print(timedelta(hours=24))
+	#delta = [i for i in payments if datetime.now().astimezone() - datetime.strptime(i['time'], "%Y-%m-%dT%H:%M:%S.%f%z").astimezone() < timedelta(hours=24)]
+	#for i in payments:
+	#	delta = datetime.now().astimezone() - datetime.strptime(i['time'], "%Y-%m-%dT%H:%M:%S.%f%z").astimezone()# < timedelta(hours=24)
+	#	print(delta)
 	return incoming_payments

@@ -40,7 +40,11 @@ async def press_detected(x):
     global current_screen
     quadrant = int(math.floor(x / quadrant_size))
     logging.debug(f"Quadrant determined: {quadrant}")
-    logging.debug(f"Current screen: {mapping[current_screen]}")
-    logging.debug(f"Next screen: {menu[current_screen][quadrant]}")
-    current_screen = menu[current_screen][quadrant]
+    logging.debug(f"Current screen: {current_screen}")
+    await set_screen(menu[current_screen][quadrant])
     await mapping[current_screen]()
+
+async def set_screen(set_current_screen):
+    global current_screen
+    current_screen = set_current_screen
+    logging.debug(f"Next screen: {current_screen}")
